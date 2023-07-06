@@ -1,7 +1,12 @@
 const spawn = require('child_process').spawn;
-const path = __dirname + '/bin/MiceDetect.exe'; //path to c# executable - created at "C# build" folder (https://github.com/OlympicAngel/MouseEvents/tree/main/C%23%20build)
+const path = require('path');
 
-var child = spawn(path); // opens executable
+const isDev = process.defaultApp || /electron-prebuilt/.test(process.execPath);
+const exePath = isDev
+  ? path.join(__dirname, './bin/MiceDetect.exe')
+  : path.join(process.resourcesPath, 'bin', 'MiceDetect.exe');
+
+var child = spawn(exePath);
 
 child.stdout.on('data', HandleBinaryOutput); // transfer all output into stdout handler
 
